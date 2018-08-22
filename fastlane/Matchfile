@@ -1,4 +1,4 @@
-git_url("git@bitbucket.org:slee168/certificates.git")
+git_url("https://simonlee3@bitbucket.org/slee168/certificates.git")
 
 type("development") # The default type, can be: appstore, adhoc, enterprise or development
 
