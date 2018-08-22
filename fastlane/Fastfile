@@ -162,6 +162,16 @@ end
   end
 
   private_lane :fabric do |options|
+    get_certificates(
+      team_name: team_name,
+      username: apple_id)
+
+    # invokes sigh.
+    get_provisioning_profile(
+      app_identifier: identifier,
+      team_name: team_name,
+      username: apple_id)
+
     build_app(
       scheme: options[:scheme],
       export_method: "ad-hoc",

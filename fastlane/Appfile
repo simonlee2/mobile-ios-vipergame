@@ -10,13 +10,13 @@
 ###############################################################################
 
 # Add The bundle identifier of your app
-app_identifier("com.matiasvillaverde.Memory")
+app_identifier("com.simonlee.Memory")
 
 # Add your Apple email address
-apple_id("github@matiasvillaverde.com")
+apple_id("slee168@illinois.edu")
 
 # Add your Apple team name
-itc_team_name "Matias Villaverde"
+itc_team_name "Shao Ping Lee"
 
 # Add your Apple team ID
-itc_team_id "1122334455"
+itc_team_id "T3LQ95726F"
