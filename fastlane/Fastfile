@@ -93,8 +93,14 @@ platform :ios do
   end
 
   lane :fabric do |options|
-    match(type: "adhoc")
-    match(type: "development")
+    match(
+      type: "adhoc",
+      shallow_clone: true
+      )
+    match(
+      type: "development",
+      shallow_clone: true
+      )
 
     build_app(
       scheme: options[:scheme],
