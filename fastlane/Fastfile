@@ -28,10 +28,10 @@ platform :ios do
 # App Variables
 ###############################################################################
 
-identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
-team_name = CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_name)
-team_id = CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_id)
-apple_id = CredentialsManager::AppfileConfig.try_fetch_value(:apple_id)
+IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+TEAM_NAME = CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_name)
+TEAM_ID = CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_id)
+APPLE_ID = CredentialsManager::AppfileConfig.try_fetch_value(:apple_id)
 scheme = "Memory" # Schema of the main app
 xcworkspace = "Memory.xcworkspace" # xCode Project name
 test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"]
@@ -70,7 +70,7 @@ test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"]
     increment_build_number(
       build_number:
       latest_testflight_build_number(
-        app_identifier: identifier,
+        app_identifier: IDENTIFIER,
         team_id: team_id,
         username: apple_id) + 1)
 
@@ -92,14 +92,14 @@ test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"]
   lane :build do
     # invokes cert.
     get_certificates(
-      team_name: team_name,
-      username: apple_id)
+      team_name: TEAM_NAME,
+      username: APPLE_ID)
 
     # invokes sigh.
     get_provisioning_profile(
-      app_identifier: identifier,
-      team_name: team_name,
-      username: apple_id)
+      app_identifier: IDENTIFIER,
+      team_name: TEAM_NAME,
+      username: APPLE_ID)
 
     # This will compile the app.
     build_app(
@@ -126,7 +126,7 @@ test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"]
   lane :deploy do
     # Deliver to app store
       deliver(
-        app_identifier: identifier,
+        app_identifier: IDENTIFIER,
         username: apple_id)
   end
 
@@ -140,7 +140,6 @@ end
     # Deliver to fabric
     version = get_version_number(target: 'Memory')
     fabric(
-      app_identifier: "com.matiasvillaverde.Memory",
       version: version,
       info_plist: INFO_PLIST_MEMORY,
       scheme: 'Memory',
@@ -161,16 +160,16 @@ end
     )
   end
 
-  private_lane :fabric do |options|
+  lane :fabric do |options|
     get_certificates(
-      team_name: team_name,
-      username: apple_id)
+      team_name: TEAM_NAME,
+      username: APPLE_ID)
 
     # invokes sigh.
     get_provisioning_profile(
-      app_identifier: identifier,
-      team_name: team_name,
-      username: apple_id)
+      app_identifier: IDENTIFIER,
+      team_name: TEAM_NAME,
+      username: APPLE_ID)
 
     build_app(
       scheme: options[:scheme],

@@ -25,6 +25,11 @@ This lane will upload app to crashlytics.
 fastlane memory_beta
 ```
 This lane will upload app to crashlytics.
+### fabric
+```
+fastlane fabric
+```
+
 
 ----
 
