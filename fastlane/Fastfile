@@ -33,8 +33,7 @@ platform :ios do
   APPLE_ID = CredentialsManager::AppfileConfig.try_fetch_value(:apple_id)
   scheme = "Memory" # Schema of the main app
   xcworkspace = "Memory.xcworkspace" # xCode Project name
-  test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"
-
+  test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"]
   setup_travis
 
 # lane :setup_signing do
