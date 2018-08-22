@@ -588,7 +588,7 @@
 				TargetAttributes = {
 					072D8044206D06AF00EB7F8F = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					072D8058206D06AF00EB7F8F = {
 						CreatedOnToolsVersion = 9.2;
@@ -601,7 +601,7 @@
 						TestTargetID = 072D8044206D06AF00EB7F8F;
 					};
 					F4F9B3AA212BFBBF00C793F8 = {
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -995,7 +995,7 @@
 			baseConfigurationReference = F92F4E8BB1C99AF21BA78A0B /* Pods-Memory.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = T3LQ95726F;
@@ -1004,6 +1004,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simonlee.Memory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "f0b99ecf-b0d0-4a45-9b76-ad7205825551";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.simonlee.Memory";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1015,7 +1017,8 @@
 			baseConfigurationReference = 0F0C36ED7C1355456F042CDA /* Pods-Memory.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = T3LQ95726F;
 				INFOPLIST_FILE = Memory/Info.plist;
@@ -1023,6 +1026,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simonlee.Memory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "2087a9af-38c7-4946-8691-0a385bafd45d";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc com.simonlee.Memory";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1106,7 +1111,7 @@
 			baseConfigurationReference = F92F4E8BB1C99AF21BA78A0B /* Pods-Memory.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = T3LQ95726F;
@@ -1115,6 +1120,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simonlee.Memory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "f0b99ecf-b0d0-4a45-9b76-ad7205825551";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.simonlee.Memory";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1126,7 +1133,8 @@
 			baseConfigurationReference = 0F0C36ED7C1355456F042CDA /* Pods-Memory.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = T3LQ95726F;
 				INFOPLIST_FILE = "$(SRCROOT)/Memory/MemoryBeta-Info.plist";
@@ -1134,6 +1142,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simonlee.Memory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "2087a9af-38c7-4946-8691-0a385bafd45d";
+				PROVISIONING_PROFILE_SPECIFIER = "match AdHoc com.simonlee.Memory";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

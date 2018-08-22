@@ -36,149 +36,75 @@ scheme = "Memory" # Schema of the main app
 xcworkspace = "Memory.xcworkspace" # xCode Project name
 test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"]
 
-###############################################################################
-# - Release
-###############################################################################
-  desc "This Lane run tests, increase build, take screenshots,
-  build for deployment, upload to app store."
-  lane :release_production do
-    test
-    increase_build
-    screenshots
-    build
-    deploy
-  end
+lane :setup_signing do
+  setup_travis
+
+  match(type: 'adhoc')
+end
+
+lane : setup_travis do
+  create_keychain(
+    name: ENV["MATCH_KEYCHAIN_NAME"],
+    password: ENV["MATCH_KEYCHAIN_PASSWORD"],
+    default_keychain: true,
+    unlock: true,
+    timeout: 3600,
+    add_to_search_list: true
+  )
+end
 
 ###############################################################################
 # - Tests
 ###############################################################################
-  desc "This Lane run tests in most important devices."
-  lane :test do
-    # This will check that the UI and Unit test are working.
-    run_tests(
-      workspace: xcworkspace,
-      devices: test_devices,
-      scheme: scheme)
-    end
-
-###############################################################################
-# - GIT
-###############################################################################
-  desc "This Lane will increase build number and push to master."
-  lane :increase_build do
-    # This will incremente the build number based on the last build.
-    increment_build_number(
-      build_number:
-      latest_testflight_build_number(
-        app_identifier: IDENTIFIER,
-        team_id: team_id,
-        username: apple_id) + 1)
-
-    # Commit the version bump
-    commit_version_bump(workspace: xcworkspace)
-
-    # Add a git tag for this build. This will automatically
-    # use an appropriate git tag name
-    add_git_tag
-
-    # Push the new commit and tag back to your git remote
-    push_to_git_remote
+desc "This Lane run tests in most important devices."
+lane :test do
+  # This will check that the UI and Unit test are working.
+  run_tests(
+    workspace: xcworkspace,
+    devices: test_devices,
+    scheme: scheme)
   end
-
-###############################################################################
-# - Build
-###############################################################################
-  desc "This Lane will build the app for delivery."
-  lane :build do
-    # invokes cert.
-    get_certificates(
-      team_name: TEAM_NAME,
-      username: APPLE_ID)
-
-    # invokes sigh.
-    get_provisioning_profile(
-      app_identifier: IDENTIFIER,
-      team_name: TEAM_NAME,
-      username: APPLE_ID)
-
-    # This will compile the app.
-    build_app(
-      scheme: scheme,
-      workspace: xcworkspace,
-      export_xcargs: "-allowProvisioningUpdates",
-      include_bitcode: true)
-  end
-
-###############################################################################
-# - Screenshots
-###############################################################################
-  desc "This Lane will take screenshots and add frames."
-  lane :screenshots do
-    # Upload screenshots to the store.
-    capture_screenshots(scheme: "MemoryScreenshots")
-    frame_screenshots(white: true)
-  end
-
-###############################################################################
-# - App Store
-###############################################################################
-  desc "This Lane will upload app to the app store."
-  lane :deploy do
-    # Deliver to app store
-      deliver(
-        app_identifier: IDENTIFIER,
-        username: apple_id)
-  end
-
-end
 
 ###############################################################################
 # - Memory crashlytics
 ###############################################################################
-  desc "This lane will upload app to crashlytics."
-  lane :memory do
-    # Deliver to fabric
-    version = get_version_number(target: 'Memory')
-    fabric(
-      version: version,
-      info_plist: INFO_PLIST_MEMORY,
-      scheme: 'Memory',
-    )
-  end
+desc "This lane will upload app to crashlytics."
+lane :memory do
+  # Deliver to fabric
+  version = get_version_number(target: 'Memory')
+  fabric(
+    version: version,
+    info_plist: INFO_PLIST_MEMORY,
+    scheme: 'Memory',
+  )
+end
 
 ###############################################################################
 # - MemoryBeta crashlytics
 ###############################################################################
-  desc "This lane will upload app to crashlytics."
-  lane :memory_beta do
-    # Deliver to fabric
-    version = get_version_number(target: 'MemoryBeta')
-    fabric(
-      version: version,
-      info_plist: INFO_PLIST_MEMORY_BETA,
-      scheme: 'MemoryBeta',
-    )
-  end
+desc "This lane will upload app to crashlytics."
+lane :memory_beta do
+  # Deliver to fabric
+  version = get_version_number(target: 'MemoryBeta')
+  fabric(
+    version: version,
+    info_plist: INFO_PLIST_MEMORY_BETA,
+    scheme: 'MemoryBeta',
+  )
+end
 
-  lane :fabric do |options|
-    get_certificates(
-      team_name: TEAM_NAME,
-      username: APPLE_ID)
+lane :fabric do |options|
+  match(type: "adhoc")
+  match(type: "development")
 
-    # invokes sigh.
-    get_provisioning_profile(
-      app_identifier: IDENTIFIER,
-      team_name: TEAM_NAME,
-      username: APPLE_ID)
+  build_app(
+    scheme: options[:scheme],
+    export_method: "ad-hoc",
+    export_xcargs: "-allowProvisioningUpdates"
+  )
 
-    build_app(
-      scheme: options[:scheme],
-      export_method: "ad-hoc",
-      export_xcargs: "-allowProvisioningUpdates"
-    )
-
-    crashlytics(
-      api_token: API_TOKEN,
-      build_secret: BUILD_SECRET
-    )
-  end
+  crashlytics(
+    api_token: API_TOKEN,
+    build_secret: BUILD_SECRET
+  )
+end
