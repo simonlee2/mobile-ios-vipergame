@@ -27,84 +27,84 @@ platform :ios do
 ###############################################################################
 # App Variables
 ###############################################################################
+  IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+  TEAM_NAME = CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_name)
+  TEAM_ID = CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_id)
+  APPLE_ID = CredentialsManager::AppfileConfig.try_fetch_value(:apple_id)
+  scheme = "Memory" # Schema of the main app
+  xcworkspace = "Memory.xcworkspace" # xCode Project name
+  test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"]
 
-IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
-TEAM_NAME = CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_name)
-TEAM_ID = CredentialsManager::AppfileConfig.try_fetch_value(:itc_team_id)
-APPLE_ID = CredentialsManager::AppfileConfig.try_fetch_value(:apple_id)
-scheme = "Memory" # Schema of the main app
-xcworkspace = "Memory.xcworkspace" # xCode Project name
-test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"]
+# lane :setup_signing do
+#   setup_travis
 
-lane :setup_signing do
-  setup_travis
+#   match(type: 'adhoc')
+# end
 
-  match(type: 'adhoc')
-end
-
-lane :setup_travis do
-  create_keychain(
-    name: ENV["MATCH_KEYCHAIN_NAME"],
-    password: ENV["MATCH_KEYCHAIN_PASSWORD"],
-    default_keychain: true,
-    unlock: true,
-    timeout: 3600,
-    add_to_search_list: true
-  )
-end
+# lane :setup_travis do
+#   create_keychain(
+#     name: ENV["MATCH_KEYCHAIN_NAME"],
+#     password: ENV["MATCH_KEYCHAIN_PASSWORD"],
+#     default_keychain: true,
+#     unlock: true,
+#     timeout: 3600,
+#     add_to_search_list: true
+#   )
+# end
 
 ###############################################################################
 # - Tests
 ###############################################################################
-desc "This Lane run tests in most important devices."
-lane :test do
-  # This will check that the UI and Unit test are working.
-  run_tests(
-    workspace: xcworkspace,
-    devices: test_devices,
-    scheme: scheme)
+  desc "This Lane run tests in most important devices."
+  lane :test do
+    # This will check that the UI and Unit test are working.
+    run_tests(
+      workspace: xcworkspace,
+      devices: test_devices,
+      scheme: scheme)
   end
 
 ###############################################################################
 # - Memory crashlytics
 ###############################################################################
-desc "This lane will upload app to crashlytics."
-lane :memory do
-  # Deliver to fabric
-  version = get_version_number(target: 'Memory')
-  fabric(
-    version: version,
-    info_plist: INFO_PLIST_MEMORY,
-    scheme: 'Memory',
-  )
-end
+  desc "This lane will upload app to crashlytics."
+  lane :memory do
+    # Deliver to fabric
+    version = get_version_number(target: 'Memory')
+    fabric(
+      version: version,
+      info_plist: INFO_PLIST_MEMORY,
+      scheme: 'Memory',
+    )
+  end
 
 ###############################################################################
 # - MemoryBeta crashlytics
 ###############################################################################
-desc "This lane will upload app to crashlytics."
-lane :memory_beta do
-  # Deliver to fabric
-  version = get_version_number(target: 'MemoryBeta')
-  fabric(
-    version: version,
-    info_plist: INFO_PLIST_MEMORY_BETA,
-    scheme: 'MemoryBeta',
-  )
-end
+  desc "This lane will upload app to crashlytics."
+  lane :memory_beta do
+    # Deliver to fabric
+    version = get_version_number(target: 'MemoryBeta')
+    fabric(
+      version: version,
+      info_plist: INFO_PLIST_MEMORY_BETA,
+      scheme: 'MemoryBeta',
+    )
+  end
 
-lane :fabric do |options|
-  match(type: "adhoc")
-  match(type: "development")
+  lane :fabric do |options|
+    match(type: "adhoc")
+    match(type: "development")
 
-  build_app(
-    scheme: options[:scheme],
-    export_method: "ad-hoc",
-    export_xcargs: "-allowProvisioningUpdates"
-  )
+    build_app(
+      scheme: options[:scheme],
+      export_method: "ad-hoc",
+      export_xcargs: "-allowProvisioningUpdates"
+    )
 
-  crashlytics(
-    api_token: API_TOKEN,
-    build_secret: BUILD_SECRET
-  )
+    crashlytics(
+      api_token: API_TOKEN,
+      build_secret: BUILD_SECRET
+    )
+  end
 end
