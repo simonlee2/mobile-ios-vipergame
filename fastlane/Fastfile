@@ -42,7 +42,7 @@ lane :setup_signing do
   match(type: 'adhoc')
 end
 
-lane : setup_travis do
+lane :setup_travis do
   create_keychain(
     name: ENV["MATCH_KEYCHAIN_NAME"],
     password: ENV["MATCH_KEYCHAIN_PASSWORD"],
