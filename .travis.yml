@@ -7,6 +7,6 @@ env:
 xcode_project: Memory.xcodeproj
 xcode_scheme: MemoryTests
 before_install:
-  - echo -e "machine bitbucket.com\n  login simonlee3\n  password $CI_USER_PASSWORD" > ~/.netrc
+  - echo -e "machine bitbucket.org\n  login simonlee3\n  password $CI_USER_PASSWORD" > ~/.netrc
 script:
   - fastlane test
