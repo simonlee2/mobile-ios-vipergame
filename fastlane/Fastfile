@@ -78,7 +78,6 @@ platform :ios do
 
     run_tests(
       workspace: xcworkspace,
-      devices: test_devices,
       scheme: scheme,
       devices: devices
       )
