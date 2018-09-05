@@ -36,22 +36,37 @@ platform :ios do
   test_devices = ["iPhone X", "iPad Pro (12.9-inch) (2nd generation)"]
   setup_travis
 
-# lane :setup_signing do
-#   setup_travis
-
-#   match(type: 'adhoc')
-# end
-
-# lane :setup_travis do
-#   create_keychain(
-#     name: ENV["MATCH_KEYCHAIN_NAME"],
-#     password: ENV["MATCH_KEYCHAIN_PASSWORD"],
-#     default_keychain: true,
-#     unlock: true,
-#     timeout: 3600,
-#     add_to_search_list: true
-#   )
-# end
+  private_lane :simulators_for_testing do |options|
+    required_os = options[:required_os] || ["9", "10", "11"]
+  
+    group_by_os = lambda { |simulators, os_list| 
+      result = []
+      os_list.each { |os|
+        simulators_of_such_os = []
+        simulators.each { |simulator|
+          simulator_os = simulator.match(/.+\((\d+)\.[\d\.]+\).+/)[1]
+          if simulator_os == os
+            simulators_of_such_os << simulator
+          end
+        }
+        result << simulators_of_such_os
+      }
+      result
+    }
+  
+    devices = `instruments -s`.split("\n")
+  
+    simulators = devices.select { |device| device.strip.match(/\(Simulator\)\z/) }
+  
+    ipad_simulators = simulators.select { |simulator| simulator.include?('iPad') }
+    iphone_simulators = simulators.select { |simulator| simulator.include?('iPhone') }
+    iphone_simulators_by_os = group_by_os.(iphone_simulators, required_os)
+    iphone_simulators_to_test = iphone_simulators_by_os.collect{ |simulators| simulators.last }.compact
+  
+    puts "Picked iPhone simulators for iOS Versions #{required_os} :"
+    iphone_simulators_to_test.each { |s| puts s }
+    test_iphone_names = iphone_simulators_to_test.map { |simulator_info| simulator_id = simulator_info.match(/(.+)\[[\w-]+\].+/)[1].strip } 
+  end
 
 ###############################################################################
 # - Tests
@@ -59,10 +74,14 @@ platform :ios do
   desc "This Lane run tests in most important devices."
   lane :test do
     # This will check that the UI and Unit test are working.
+    devices = simulators_for_testing(required_os: ["9", "10", "11"])
+
     run_tests(
       workspace: xcworkspace,
       devices: test_devices,
-      scheme: scheme)
+      scheme: scheme,
+      devices: devices
+      )
   end
 
 ###############################################################################
